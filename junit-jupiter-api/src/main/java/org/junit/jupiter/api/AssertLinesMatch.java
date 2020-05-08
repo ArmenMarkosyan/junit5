@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * {@code AssertLinesMatch} is a collection of utility methods that support asserting
@@ -45,6 +47,36 @@ class AssertLinesMatch {
 
 	static void assertLinesMatch(List<String> expectedLines, List<String> actualLines, String message) {
 		assertLinesMatch(expectedLines, actualLines, (Object) message);
+	}
+
+	static void assertLinesMatch(Stream<String> expectedLines, Stream<String> actualLines) {
+		// trivial case: same list instance
+		if (expectedLines == actualLines) {
+			return;
+		}
+		List<String> expectedListOfStrings = expectedLines.collect(Collectors.toList());
+		List<String> actualListOfStrings = actualLines.collect(Collectors.toList());
+		assertLinesMatch(expectedListOfStrings, actualListOfStrings, (Object) null);
+	}
+
+	static void assertLinesMatch(Stream<String> expectedLines, Stream<String> actualLines, String message) {
+		// trivial case: same list instance
+		if (expectedLines == actualLines) {
+			return;
+		}
+		List<String> expectedListOfStrings = expectedLines.collect(Collectors.toList());
+		List<String> actualListOfStrings = actualLines.collect(Collectors.toList());
+		assertLinesMatch(expectedListOfStrings, actualListOfStrings, (Object) message);
+	}
+
+	static void assertLinesMatch(Stream<String> expectedLines, Stream<String> actualLines, Object messageOrSupplier) {
+		// trivial case: same list instance
+		if (expectedLines == actualLines) {
+			return;
+		}
+		List<String> expectedListOfStrings = expectedLines.collect(Collectors.toList());
+		List<String> actualListOfStrings = actualLines.collect(Collectors.toList());
+		assertLinesMatch(expectedListOfStrings, actualListOfStrings, messageOrSupplier);
 	}
 
 	static void assertLinesMatch(List<String> expectedLines, List<String> actualLines, Object messageOrSupplier) {
